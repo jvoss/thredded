@@ -35,8 +35,8 @@ module PageObject
     end
 
     def submit_new_content(content)
-      fill_in 'Content', with: content
-      click_on 'Update Post'
+      fill_in I18n.t('thredded.posts.form.content_label'), with: content
+      click_on I18n.t('thredded.posts.form.update_btn')
     end
 
     def css_selector
@@ -53,13 +53,13 @@ module PageObject
 
     def delete
       within(css_selector) do
-        click_link('Delete Post')
+        click_link(I18n.t('thredded.posts.delete'))
       end
     end
 
     def mark_unread_from_here
       within(css_selector) do
-        click_button('Mark unread from here')
+        click_button(I18n.t('thredded.topics.mark_as_unread'))
       end
     end
   end
