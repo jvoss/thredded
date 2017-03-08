@@ -10,7 +10,7 @@ module Thredded
       if Thredded.user_display_name_method == :to_s
         name = user.send(Thredded.user_name_column)
       else
-        name = "#{user.send(Thredded.user_name_column)} - #{user.send(Thredded.user_display_name_method)}"
+        name = [user.send(Thredded.user_name_column), user.send(Thredded.user_display_name_method)].uniq.join(' - ')
       end
 
       render json: {
