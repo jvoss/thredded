@@ -7,22 +7,24 @@ module Thredded
       authorize_creating PrivateTopicForm.new(user: thredded_current_user).private_topic
       users = params.key?(:q) ? users_by_prefix : users_by_ids
 
-      if Thredded.user_display_name_method == :to_s
-        name = user.send(Thredded.user_name_column)
-      else
-        name = [user.send(Thredded.user_name_column), user.send(Thredded.user_display_name_method)].uniq.join(' - ')
-      end
-
       render json: {
         results: users.map do |user|
           { id:         user.id,
-            name:       name,
+            name:       autocomplete_display_name(user),
             avatar_url: Thredded.avatar_url.call(user) }
         end
       }
     end
 
     private
+
+    def autocomplete_display_name(user)
+      if Thredded.user_display_name_method == :to_s
+        user.send(Thredded.user_name_column)
+      else
+        [user.send(Thredded.user_name_column), user.send(Thredded.user_display_name_method)].uniq.join(' - ')
+      end
+    end
 
     def users_by_prefix
       query = params[:q].to_s.strip
